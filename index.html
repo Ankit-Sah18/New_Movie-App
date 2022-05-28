@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+     #top{
+
+        margin-bottom: 40px;
+        color: teal;
+        text-align: center;
+     }
+
+     #box{
+    padding: 50px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    height: 600px;
+    width: 80%;
+    margin: auto;
+    border-radius: 10px;
+    background-color:turquoise;
+    
+    }
+
+    #submit{
+    padding: 5px 80px;
+    font-size: 20px;
+    margin: auto;
+    margin-top: 30px;
+    display: block;
+    margin-top: 30px;
+    background-color: rgb(128, 84, 14);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+   }
+
+   #moive{
+    width: 10%;
+    padding: 10px 150px 10px 150px;
+    margin: auto;
+    margin-top: 20px;
+    color: white;
+    font-size: 20px;
+    background-color: rgb(47, 153, 239);
+    border-radius: 10px;
+    text-align: center;
+   
+  }
+
+  #div{
+    width: 50%;
+    margin: auto;
+    height: 500px;
+   
+}
+
+img{
+    width: 60%;
+    margin-left: 20%;
+    height: 400px;
+}
+p{
+    font-size: larger;
+    font-style: italic;
+    color: brown;
+    
+}
+
+    </style>
+</head>
+<body>
+    <div id="top">
+        <h1>Moive App Info</h1>
+    <form  onsubmit="Moive(event)">
+      <input type="text" placeholder="Moive Name" id="moive">
+        <br>
+      <input type="submit" value="Search" id="submit">
+    
+    </form>
+    </div>
+
+    <div>
+        <div id="box"></div>
+    </div>
+</body>
+</html>
+<script>
+
+
+      let myAPI="999b0b95";
+
+      function Moive(event)
+      {
+        event.preventDefault();
+
+        let moive=document.getElementById("moive").value;
+
+        let url="http://www.omdbapi.com/?apikey="+myAPI;
+
+        url=url+"&t="+moive;
+
+          fetch(url)
+          .then(function(res){
+
+             return res.json()
+          })
+          .then(function(res){
+              console.log(res)
+              appendData(res)
+          })
+          .catch(function(err){
+              console.log(err)
+          })
+
+
+         
+          
+      }
+    
+
+      function appendData(data)
+      {
+         console.log(data)
+
+         if(data.Response=="False")
+         {
+            //  console.log("moive not found")
+              document.getElementById("box").innerHTML=null
+            let div=document.createElement("div")
+
+            let img=document.createElement("img")
+            img.src="https://media1.giphy.com/media/KXckvpyXLQ9PosbxaA/200w.webp?cid=ecf05e476z7q24ps1i0zvi3nigbi9jc8k703zkdtjtid7ytc&rid=200w.webp&ct=g"
+
+            div.append(img)
+
+            document.getElementById("box").append(div)
+         }
+
+         else{
+
+
+            document.getElementById("box").innerHTML=null
+            let div= document.createElement("div")
+            div.setAttribute("id","div")
+
+            let poster=document.createElement("img")
+            poster.src=data.Poster
+
+            let div2=document.createElement("div")
+
+            let tite=document.createElement("p");
+
+            tite.innerText= `Title: ${data.Title}`
+
+            let actor=document.createElement("p")
+
+            actor.innerText=`Actors: ${data.Actors}`
+
+            let release=document.createElement("p")
+            release.innerText=`Released Date: ${data.Released}`;
+
+            // let rating=document.createElement("p")
+            // rating.innerText=`Rating: ${data.imdbRating}`
+
+            if ((data.imdbRating) >= 8.5) {
+            var rating = document.createElement("p");
+
+            let i = document.createElement("i");
+
+            rating.append(i);
+
+            rating.innerText = `Imdb Recommended : ${data.imdbRating}`;
+            rating.style.color="red"
+
+
+            }
+           else {
+            var rating = document.createElement("p");
+            rating.innerText = `Imdb Rating : ${data.imdbRating}`;
+            }
+
+            
+
+            div2.append(tite,actor,release,rating)
+            div.append(poster,div2)
+             
+            document.getElementById("box").append(div)
+            
+          
+            document.getElementById("box").value=null;
+            
+            
+         }
+
+         
+      }
+
+     
+</script>
